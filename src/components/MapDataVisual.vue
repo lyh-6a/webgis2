@@ -12,6 +12,7 @@ import geoCoordMap from './data/geoCoordMap'
 import * as echarts from 'echarts'
 import { loadModules } from 'esri-loader';
 import config from './config';
+import { loadBMap } from './map.js'
 export default {
   name: 'BmapScatter',
    return: {
@@ -140,7 +141,9 @@ export default {
       return res;
       };
 
-      const myChart = this.$echarts.init(this.$refs.bmap)
+      this.$nextTick(() =>{
+        loadBMap("xnFdpzA5UPeR4wf8Bfe8YbvVaETx3lWn").then(()=>{
+             const myChart = this.$echarts.init(this.$refs.bmap)
       myChart.setOption({
         bmap: {
           key: 'xnFdpzA5UPeR4wf8Bfe8YbvVaETx3lWn',
@@ -215,6 +218,11 @@ export default {
             }
         },
       });
+        })
+      })
+
+
+   
     },
   }
 }
