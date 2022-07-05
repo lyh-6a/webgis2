@@ -142,7 +142,7 @@ export default {
       return res;
       };
 
-      this.$nextTick(() =>{
+      
         loadBMap("xnFdpzA5UPeR4wf8Bfe8YbvVaETx3lWn").then(()=>{
              const myChart = this.$echarts.init(this.$refs.bmap)
       myChart.setOption({
@@ -220,7 +220,7 @@ export default {
         },
       });
         })
-      })
+      
 
 
    

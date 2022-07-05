@@ -6,6 +6,7 @@ import router from './router/router';
 import store from './store';
 import * as echarts from 'echarts'
 
+
 Vue.prototype.$echarts = echarts
 
 Vue.config.productionTip = false;
