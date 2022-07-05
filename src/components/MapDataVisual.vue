@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import 'echarts/extension/bmap/bmap'
+require('echarts/extension/bmap/bmap');
 import data from './data/dataValue'
 import geoCoordMap from './data/geoCoordMap'
 import * as echarts from 'echarts'
