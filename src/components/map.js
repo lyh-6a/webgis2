@@ -11,7 +11,7 @@ export function loadBMap(ak) {
         let script = document.createElement('script')
         script.type = 'text/javascript'
         script.src =
-            'http://api.map.baidu.com/api?v=3.0&ak=' + ak + '&__ec_v__=20190126&callback=onBMapCallback'
+            'https://api.map.baidu.com/api?v=3.0&ak=' + ak + '&s=1'
         script.onerror = reject
         document.head.appendChild(script)
     })
