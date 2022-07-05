@@ -6,6 +6,7 @@
 </template>
 
 <script>
+require('echarts');
 require('echarts/extension/bmap/bmap');
 import data from './data/dataValue'
 import geoCoordMap from './data/geoCoordMap'
@@ -146,7 +147,7 @@ export default {
              const myChart = this.$echarts.init(this.$refs.bmap)
       myChart.setOption({
         bmap: {
-          key: 'xnFdpzA5UPeR4wf8Bfe8YbvVaETx3lWn',
+          // key: 'xnFdpzA5UPeR4wf8Bfe8YbvVaETx3lWn',
           center: [104.114129, 37.550339] // 当前视角中心位置的坐标
         },
         series: [
