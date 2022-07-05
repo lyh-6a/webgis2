@@ -1,10 +1,10 @@
 <template>
     <div class="onemap-page">
         <Mapview />
-        <MapTools/>
+        <MapTools />
         <MapTree />
         <XZQHComponent />
-        <ResultTable/>
+        <ResultTable />
     </div>
 </template>
 
@@ -13,17 +13,17 @@ import Mapview from './../components/common/Mapview';
 import MapTools from './../components/MapTools';
 import MapTree from './../components/MapTree';
 import XZQHComponent from './../components/XZQHComponent';
-import ResultTable from '@/components/ResultTable.vue';
+import ResultTable from './../components/ResultTable';
 
 export default {
     name: 'OneMap',
     components: {
-    Mapview,
-    MapTools,
-    MapTree,
-    XZQHComponent,
-    ResultTable,
-},
+        Mapview,
+        MapTools,
+        MapTree,
+        XZQHComponent,
+        ResultTable,
+    },
     methods: {},
 };
 </script>

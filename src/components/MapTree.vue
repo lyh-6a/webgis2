@@ -11,6 +11,7 @@
 <script>
 import { loadModules } from 'esri-loader';
 import config from './config';
+
 export default {
     name: 'MapTree',
     components: {},
@@ -32,6 +33,7 @@ export default {
                         },
                     ],
                 },
+
                 {
                     label: '行政区划数据',
                     children: [
@@ -39,19 +41,19 @@ export default {
                             label: '省数据',
                             layerid: 'layerid',
                             layerurl:
-                                'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHProvince_WebMokatuo/FeatureServer',
+                                'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/sheng/FeatureServer',
                         },
                         {
                             label: '市数据',
                             layerid: 'layerid',
                             layerurl:
-                                'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCity_WebMokatuo/FeatureServer',
+                                'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/cityccc/FeatureServer',
                         },
                         {
                             label: '县数据',
                             layerid: 'layerid',
                             layerurl:
-                                'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCounty_WebMokatuo/FeatureServer',
+                                'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/county/FeatureServer',
                         },
                     ],
                 },
@@ -59,28 +61,22 @@ export default {
                     label: '业务数据',
                     children: [
                         {
-                            label: '火车站数据 84',
+                            label: '火车站数据',
                             layerid: 'layerid',
                             layerurl:
-                                'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/trainstationdata/FeatureServer',
-                        },
-                        {
-                            label: '火车站数据 Mekatuo',
-                            layerid: 'layerid',
-                            layerurl:
-                                'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/trainstation_WebMokatuo/FeatureServer',
+                                'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/station/FeatureServer',
                         },
                         {
                             label: '卷帘分析 top',
                             layerid: 'swipeLayerTop',
                             layerurl:
-                                'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHProvince_WebMokatuo/FeatureServer',
+                                'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/cityccc/FeatureServer',
                         },
                         {
                             label: '卷帘分析 bottom',
                             layerid: 'swipeLayerBottom',
                             layerurl:
-                                'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCity_WebMokatuo/FeatureServer',
+                                'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/county/FeatureServer',
                         },
                     ],
                 },
@@ -99,6 +95,7 @@ export default {
                 const view = this.$store.getters._getDefaultMapView;
                 const resultLayer = view.map.findLayerById('layerid');
                 if (resultLayer) view.map.remove(resultLayer);
+
                 //处理不同服务类型
                 const [TileLayer, FeatureLayer] = await loadModules(
                     ['esri/layers/TileLayer', 'esri/layers/FeatureLayer'],

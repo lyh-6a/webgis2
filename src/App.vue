@@ -2,7 +2,7 @@
     <div id="app">
         <el-container class="app-out-pannel">
             <el-header class="sys-header">
-                <span>一张图</span>
+                <span>标题</span>
                 <div class="user-info">
                      <i class="el-icon-user"></i>
                     <span>当前用户：</span>
@@ -26,7 +26,7 @@
                         </el-menu-item>
                         <el-menu-item index="2">
                             <i class="el-icon-picture-outline"></i>
-                            <span slot="title">一张图</span>
+                            <span slot="title">标题</span>
                         </el-menu-item>
                     </el-menu>
                 </el-aside>
@@ -58,7 +58,7 @@
             <br />
             <el-switch v-model="loginSwitch" active-text="注册" inactive-text="登录"> </el-switch>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="loginDialogVisible = true">取 消</el-button>
+                <el-button @click="loginDialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="userLogin">{{ loginSwitch ? '注册' : '登录' }}</el-button>
             </span>
         </el-dialog>

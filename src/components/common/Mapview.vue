@@ -1,18 +1,17 @@
 <template>
-       <div class="mapview-pannel">
-            <div id="mapview"></div>
-            <div id="basemapToggle"></div>
-            <div id="scaleBar"></div>
-            <div id="zoom"></div>
-            <div class="view-change" @click="handleViewChale">
+    <div class="mapview-pannel">
+        <div id="mapview"></div>
+        <div id="basemapToggle"></div>
+        <div id="scaleBar"></div>
+        <div id="zoom"></div>
+        <div class="view-change" @click="handleViewChale">
             <span>{{ viewModel }}</span>
         </div>
-        </div>
+    </div>
 </template>
 
 <script>
 import { loadModules } from 'esri-loader';
-
 import config from './../config';
 
 export default {
@@ -42,8 +41,9 @@ export default {
                     'esri/widgets/ScaleBar',
                     'esri/widgets/Zoom',
                 ],
-                 config.options,
+                config.options,
             );
+
             let basemap = new Basemap({
                 baseLayers: [
                     new TileLayer({
@@ -53,7 +53,7 @@ export default {
                 ],
                 title: 'basemap',
                 id: 'basemap',
-            }); //let 生成块作用域变量
+            });
 
             const map = new Map({
                 basemap,
@@ -66,37 +66,42 @@ export default {
                 center: [104.072745, 30.663774],
             });
 
-             this.basemapToggle = new BasemapToggle({
+            //实例化底图切换控件
+            this.basemapToggle = new BasemapToggle({
                 view: mapView,
                 nextBasemap: 'hybrid',
                 container: 'basemapToggle',
             });
-            
+            mapView.ui.add(this.basemapToggle);
+
             //实例化比例尺
             this.scaleBar = new ScaleBar({
                 view: mapView,
                 unit: 'metric',
                 container: 'scaleBar',
             });
-            this.ui.add(this.scaleBar);
+            mapView.ui.add(this.scaleBar);
+
             //实例化缩放控件
             this.zoom = new Zoom({
                 view: mapView,
                 container: 'zoom',
             });
             mapView.ui.add(this.zoom);
+
             mapView.ui.components = [];
 
             this.$store.commit('_setDefaultMapView', mapView);
         },
-                    async _createSceneView() {
+        async _createSceneView() {
             document.getElementById('basemapToggle').innerHTML = '';
             document.getElementById('scaleBar').innerHTML = '';
             document.getElementById('zoom').innerHTML = '';
             const [Map, SceneView, Basemap, TileLayer] = await loadModules(
                 ['esri/Map', 'esri/views/SceneView', 'esri/Basemap', 'esri/layers/TileLayer'],
-                 config.options,
+                config.options,
             );
+
             let basemap = new Basemap({
                 baseLayers: [
                     new TileLayer({
@@ -107,20 +112,25 @@ export default {
                 title: 'basemap',
                 id: 'basemap',
             });
+
             const map = new Map({
                 basemap,
             });
+
             const sceneView = new SceneView({
                 container: 'mapview',
                 map: map,
             });
+
             setTimeout(() => {
                 sceneView.goTo({
                     zoom: 10,
                     center: [104.072745, 30.663774],
                 });
             }, 3000);
+
             sceneView.ui.components = [];
+
             this.$store.commit('_setDefaultMapView', sceneView);
         },
         //二三维切换

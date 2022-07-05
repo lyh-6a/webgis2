@@ -2,7 +2,6 @@ var express = require('express');
 var pg = require('pg');
 var router = express.Router();
 
-//链接pg
 var pgConfig = "postgres://postgres:123456@localhost:5432/webgis";
 
 //获取用户信息接口

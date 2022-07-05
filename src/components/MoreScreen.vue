@@ -79,46 +79,10 @@ export default {
             mapView03.ui.components = [];
             mapView04.ui.components = [];
             //地图联动
-            // var a1= new Boolean(1);
-            // var a2= new Boolean(1);
-   
-            // watchUtils.whenTrue(mapView01, 'stationary', function () {
-
-            //     if (a1) {
-            //         mapView02.goTo({
-            //             center: [mapView01.center.longitude, mapView01.center.latitude],
-            //             zoom: mapView01.zoom,
-            //         });
-            //         mapView03.goTo({
-            //             center: [mapView01.center.longitude, mapView01.center.latitude],
-            //             zoom: mapView01.zoom,
-            //         });
-            //         mapView04.goTo({
-            //             center: [mapView01.center.longitude, mapView01.center.latitude],
-            //             zoom: mapView01.zoom,
-            //         });
-            //         !a1
-                    
-            //     }else if(!a1){
-            //         !a1
-            //     }
-                
-                
-            //     // Get the new extent of the view only when view is stationary.
-            //     if (mapView01.extent) {
-            //         console.log(
-            //             '2',
-            //             mapView01.extent.xmin.toFixed(2),
-            //             mapView01.extent.xmax.toFixed(2),
-            //             mapView01.extent.ymin.toFixed(2),
-            //             mapView01.extent.ymax.toFixed(2),
-            //         );
-            //     }
-            // });
-        var flag1=true;
-        var flag2=true;
-        var flag3=true;
-        var flag4=true;
+            var flag1=true;
+            var flag2=true;
+            var flag3=true;
+            var flag4=true;
             mapView01.on("mouse-wheel",function(){
                 if(flag1){
                     window.setTimeout(function(){
@@ -165,7 +129,97 @@ export default {
                 }
             });
 
+            mapView02.on("mouse-wheel",function(){
+                if(flag2){
+                    window.setTimeout(function(){
+                        mapView01.goTo({
+                        center: [mapView02.center.longitude, mapView02.center.latitude],
+                        zoom: mapView02.zoom,
+                    });
+                    mapView03.goTo({
+                        center: [mapView02.center.longitude, mapView02.center.latitude],
+                        zoom: mapView02.zoom,
+                    });
+                    mapView04.goTo({
+                        center: [mapView02.center.longitude, mapView02.center.latitude],
+                        zoom: mapView02.zoom,
+                         });
+                        flag2= false;
+                        flag3= false;
+                        flag4 = false;
+                    },100)
+                }else if(!flag2){
+                    flag2 = true;
+                }
+            });
+            mapView02.on("drag",function(){
+                console.log(flag2)
+                if(flag2){                  
+                    window.setTimeout(function(){
+                        mapView01.goTo({
+                        center: [mapView02.center.longitude, mapView02.center.latitude],
+                        zoom: mapView02.zoom,
+                    });
+                    mapView03.goTo({
+                        center: [mapView02.center.longitude, mapView02.center.latitude],
+                        zoom: mapView02.zoom,
+                    });
+                    mapView04.goTo({
+                        center: [mapView02.center.longitude, mapView02.center.latitude],
+                        zoom: mapView02.zoom,
+                         });
+                    flag1,flag3,flag4=false;
+                        },100)
+                }else if(!flag2){
+                    flag2 = true;
+                }
+            });
 
+                mapView03.on("mouse-wheel",function(){
+                if(flag3){
+                    window.setTimeout(function(){
+                        mapView01.goTo({
+                        center: [mapView03.center.longitude, mapView03.center.latitude],
+                        zoom: mapView03.zoom,
+                    });
+                    mapView02.goTo({
+                        center: [mapView03.center.longitude, mapView03.center.latitude],
+                        zoom: mapView03.zoom,
+                    });
+                    mapView04.goTo({
+                        center: [mapView03.center.longitude, mapView03.center.latitude],
+                        zoom: mapView03.zoom,
+                         });
+                        flag2= false;
+                        flag1= false;
+                        flag4 = false;
+                    },100)
+                }else if(!flag3){
+                    flag1 = true;
+                }
+            });
+            mapView03.on("drag",function(){
+                console.log(flag3)
+                if(flag3){                  
+                    window.setTimeout(function(){
+                        mapView01.goTo({
+                        center: [mapView03.center.longitude, mapView03.center.latitude],
+                        zoom: mapView03.zoom,
+                    });
+                    mapView02.goTo({
+                        center: [mapView03.center.longitude, mapView03.center.latitude],
+                        zoom: mapView03.zoom,
+                    });
+                    mapView04.goTo({
+                        center: [mapView03.center.longitude, mapView03.center.latitude],
+                        zoom: mapView03.zoom,
+                         });
+                    flag1,flag2,flag4=false;
+                        },100)
+                }else if(!flag3){
+                    flag3 = true;
+                }
+            });
 
             mapView04.on("mouse-wheel",function(){
                 if(flag4){
@@ -212,16 +266,13 @@ export default {
                     flag4 = true;
                 }
             });
-
         },
             back(){
                 
                     this.$router.push('/onemap');
             },
     },
-
 };
-
 </script>
 
 <style>
@@ -262,7 +313,6 @@ export default {
     margin-left: 2.5px;
 }
 .maptools-view{
-
     top: 6%;
     /* background-color:transparent; */
     

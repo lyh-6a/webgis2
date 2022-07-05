@@ -29,11 +29,11 @@
                         <span
                             class="county-item"
                             v-for="item2 in item.children"
-                            :key="item2.attributes.Name"
-                            :value="item2.attributes.Code"
-                            @click="handleItemClick(item2.attributes.Code, 'county')"
-                            >{{ item2.attributes.Name }}
-                        </span>
+                            :key="item2.attributes.NAME"
+                            :value="item2.attributes.PAC"
+                            @click="handleItemClick(item2.attributes.PAC, 'county')"
+                            >{{ item2.attributes.NAME }}</span
+                        >
                     </td>
                 </tr>
             </tbody>
@@ -44,7 +44,9 @@
 <script>
 import { loadModules } from 'esri-loader';
 import config from './config';
+
 let graphic = '';
+
 export default {
     name: 'XZQHComponent',
     components: {},
@@ -62,22 +64,26 @@ export default {
         //获取行政区划 省份数据
         async getProvinceData() {
             const _self = this;
-            const [QueryTask, Query] = await loadModules(['esri/tasks/QueryTask', 'esri/tasks/support/Query'], config.options,);
+            const [QueryTask, Query] = await loadModules(
+                ['esri/tasks/QueryTask', 'esri/tasks/support/Query'],
+                config.options,
+            );
             const queryTask = new QueryTask({
-                url: 'https://services3.arcgis.com/4MALbzcKZ6tNTFMI/arcgis/rest/services/XZQHProvince_WebMokatuo/FeatureServer/0',
+                url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/sheng/FeatureServer/2',
             });
             let query = new Query();
             query.returnGeometry = false;
             query.outFields = ['*'];
             query.where = '1=1';
+
             //Promise then 链式调用
             queryTask.execute(query).then(function (results) {
                 let currentData = [];
                 if (results.features.length > 0) {
                     results.features.map((item) => {
                         currentData.push({
-                            value: item.attributes.Code,
-                            label: item.attributes.Name,
+                            value: item.attributes.省代码,
+                            label: item.attributes.省,
                         });
                     });
                     _self.provinceOptions = currentData;
@@ -95,42 +101,54 @@ export default {
         },
         async getCityAndCountyData(value) {
             const _self = this;
-            const provinceCode = value.toString().substring(0, 2);
-            const [QueryTask, Query] = await loadModules(['esri/tasks/QueryTask', 'esri/tasks/support/Query'], config.options,);
+            const provinceCode= value.toString().substring(0, 2);
+            const [QueryTask, Query] = await loadModules(
+                ['esri/tasks/QueryTask', 'esri/tasks/support/Query'],
+                config.options,
+            );
             const queryTask = new QueryTask({
-                url: 'https://services3.arcgis.com/4MALbzcKZ6tNTFMI/arcgis/rest/services/XZQHCity_WebMokatuo/FeatureServer/0',
+                url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/cityccc/FeatureServer/5',
             });
             let query = new Query();
             query.returnGeometry = false;
             query.outFields = ['*'];
-            query.where = "Code like '" + provinceCode + "%'";
+            query.where = "市代码 like '" + provinceCode + "%'";
+
             //async await用法
             let results = await queryTask.execute(query);
             let currentCityData = [];
             if (results.features.length > 0) {
                 results.features.map((item) => {
                     currentCityData.push({
-                        value: item.attributes.Code,
-                        label: item.attributes.Name,
+                        value: item.attributes.市代码,
+                        label: item.attributes.市,
                     });
                 });
                 //循环遍历 获取每一市级对应的区县数据
+
+
                 Promise.all(
                     currentCityData.map(async (item2) => {
                         const cityCode = item2.value.toString().substring(0, 4);
                         const queryTask2 = new QueryTask({
-                            url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCity_WebMokatuo/FeatureServer/0',                                            
+                            url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/county/FeatureServer/4',
                         });
                         let query2 = new Query();
                         query2.returnGeometry = false;
                         query2.outFields = ['*'];
-                        query2.where = "Code like '" + cityCode + "%'";//"code like" like 是相似符号，类似于 ’=‘
+                        query2.where = "市代码 like '"+cityCode+"%'";
+                        
                         const result2 = await queryTask2.execute(query2);
                         item2.children = result2.features;
+                        console.log(cityCode);
+                        
+
                         return item2;
+                        
                     }),
                 ).then((res) => {
                     this.cityAndCountyOptions = res;
+                   
                 });
             } else {
                 _self.$message({
@@ -146,16 +164,17 @@ export default {
             const view = this.$store.getters._getDefaultMapView;
             if (type === 'city') {
                 code = val.toString().substring(0, 4);
-                serverUrl =
-                    'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCity_WebMokatuo/FeatureServer/0';
+                serverUrl ='https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/cityccc/FeatureServer/5';
+            
             } else if (type === 'county') {
                 code = val.toString().substring(0, 6);
-                serverUrl =
-                    'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCounty_WebMokatuo/FeatureServer/0';
+                 serverUrl =
+                    'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/county/FeatureServer/4'
+;
             }
             const [QueryTask, Query, Graphic] = await loadModules(
                 ['esri/tasks/QueryTask', 'esri/tasks/support/Query', 'esri/Graphic'],
-               config.options,
+                config.options,
             );
             const queryTask = new QueryTask({
                 url: serverUrl,
@@ -163,8 +182,12 @@ export default {
             let query = new Query();
             query.returnGeometry = true;
             query.outFields = ['*'];
-            query.where = "Code like '" + code + "%'";
+            if (type === 'city') {
+            query.where = "省代码 like '" + code + "%'";
+            } else if(type === 'county') {
+                query.where = "PAC like '" + code + "%'";}
             let results = await queryTask.execute(query);
+
             //渲染和定位
             const featuresResult = results.features[0];
             if (graphic) {
@@ -178,11 +201,13 @@ export default {
                     width: 2,
                 },
             };
+
             graphic = new Graphic({
                 geometry: featuresResult.geometry,
                 symbol: fillSymbol,
             });
             view.graphics.add(graphic);
+
             view.goTo({
                 center: [
                     featuresResult.geometry.extent.center.longitude,
@@ -251,14 +276,16 @@ export default {
 }
 .county-item {
     font-size: 12px;
-    color: #999;
+    color: black;
     margin: 0 10px 5px 0;
     cursor: pointer;
+    
 }
 .county-item:hover {
     color: #409eff;
 }
- .XZQHComponent-pannel tr {
+
+.XZQHComponent-pannel tr {
     display: block; /*将tr设置为块体元素*/
     margin-bottom: 15px; /*设置tr间距为15px*/
 }

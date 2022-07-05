@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({  //配置这两行代码
 }));
 app.use(bodyParser.json());      //配置这两行代码
 
-app.use('/home', home);
+app.use('/', home);
 app.use('/user', user);
 
 app.listen(3001);

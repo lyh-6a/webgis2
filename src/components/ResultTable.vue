@@ -6,7 +6,7 @@
         </div>
         <div class="result-table-content">
             <el-table :data="this.$store.getters._getDefaultQueryResult" height="250" style="width: 100%">
-                <el-table-column prop="key" label="序号"> </el-table-column>
+                <!-- <el-table-column prop="key" label="序号"> </el-table-column> -->
                 <el-table-column prop="name" label="站名"> </el-table-column>
                 <el-table-column prop="type" label="类型"> </el-table-column>
                 <el-table-column prop="tieluju" label="铁路局"> </el-table-column>
