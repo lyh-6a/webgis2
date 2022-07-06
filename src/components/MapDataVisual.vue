@@ -8,7 +8,7 @@
 <script>
 require('echarts');
 require('echarts/extension/bmap/bmap');
-// import data from './data/dataValue'
+import data from './data/dataValue'
 import geoCoordMap from './data/geoCoordMap'
 import * as echarts from 'echarts'
 import { loadModules } from 'esri-loader';
@@ -58,7 +58,6 @@ export default {
                         });
                     });
                     _self.station = currentData;
-                    //  console.log(currentData);
                  return currentData;
                   
 
@@ -68,128 +67,110 @@ export default {
                         type: 'warning',
                     });
                 }
-            // console.log(currentData)
 });
-        console.log(currentData)
+      // console.log(currentData)
+             setTimeout(() => {
+                const convertData = function (data) {
+                  var res = [];
+                    for (var i = 0; i < data.length; i++) {
+                      var geoCoord = geoCoordMap[currentData[i].Name];
+                      if (geoCoord) {
+                        res.push({
+                          name: currentData[i].Name,
+                          value: currentData[i].value
+                        });
+                      }
+                    }
+                  return res;
+                };
 
+                const convertData2 = function (data) {
+                  var res = [];
+                  for (var i = 0; i < data.length; i++) {
+                    var geoCoord = geoCoordMap[currentData[i].Name];
+                    if (geoCoord) {
+                      res.push({
+                        value: currentData[i].Name
+                      });
+                    }
+                  }
+                  return res;
+                };
 
-
-
-        
-       setTimeout(() => {
-  const convertData = function (data) {
-  var res = [];
-  for (var i = 0; i < data.length; i++) {
-    var geoCoord = geoCoordMap[currentData[i].Name];
-    if (geoCoord) {
-      res.push({
-        name: currentData[i].Name,
-        value: currentData[i].value
-      });
-    }
-  }
- 
-  return res;
-};
-
-
-
-  const convertData2 = function (data) {
-  var res = [];
-  for (var i = 0; i < data.length; i++) {
-    var geoCoord = geoCoordMap[currentData[i].Name];
-    if (geoCoord) {
-      res.push({
-        // name: currentData[i].Name,
-        value: currentData[i].Name
-      });
-    }
-  }
- 
-  return res;
-};
-
-
-
-        var myChart2 = echarts.init(this.$refs.echart2);
-        var option2 = {
-            title: {
-                text: '各省火车站数量'
-            },
-            tooltip: {},
-            legend: {
-                data:convertData(currentData)
-            },
-            xAxis: {
-                data: convertData2(currentData)
-            },
-            yAxis: {},
-            series: [{
-                name: '省',
-                type: 'bar',
-                data: convertData(currentData),
-            }]
-        };
-
-        myChart2.setOption(option2);
-
-        }, 4000); 
-    },
+                var myChart2 = echarts.init(this.$refs.echart2);
+                var option2 = {
+                  title: {
+                      text: '各省火车站数量'
+                  },
+                  tooltip: {},
+                  legend: {
+                      data:convertData(currentData)
+                  },
+                  xAxis: {
+                      data: convertData2(currentData)
+                  },
+                  yAxis: {},
+                  series: [{
+                      name: '省',
+                      type: 'bar',
+                      data: convertData(currentData),
+                  }]
+                  };
+                  myChart2.setOption(option2);
+              }, 4000); 
+        },
 
 ////地图
     initBmap () {
-      // const convertData = function (data) {
-      // var res = [];
-      // for (var i = 0; i < data.length; i++) {
-      //   var geoCoord = geoCoordMap[data[i].name];
-      //   if (geoCoord) {
-      //     res.push({
-      //       name: data[i].name,
-      //       value: geoCoord.concat(data[i].value)
-      //     });
-      //   }
-      // }    
-      // return res;
-      // };
+      const convertData = function (data) {
+      var res = [];
+      for (var i = 0; i < data.length; i++) {
+        var geoCoord = geoCoordMap[data[i].name];
+        if (geoCoord) {
+          res.push({
+            name: data[i].name,
+            value: geoCoord.concat(data[i].value)
+          });
+        }
+      }    
+      return res;
+      };
 
    
              const myChart = this.$echarts.init(this.$refs.bmap)
       myChart.setOption({
+        geo:{
+          map:"china"
+        },
         series:[{
-          type:'map',
-          map:'china',
-        }],
-        // bmap: {
-        //   key: 'xnFdpzA5UPeR4wf8Bfe8YbvVaETx3lWn',
-        //   center: [104.114129, 37.550339] // 当前视角中心位置的坐标
-        // },
-        // series: [
-        //     {
-        //       name: '火车站数量',
-        //       type: 'scatter',
-        //       coordinateSystem: 'bmap',
-        //       data: convertData(data),
-        //       symbolSize: function (val) {
-        //         return val[2] ;
-        //       },
-        //       encode: {
-        //         value: 2
-        //       },
-        //       label: {
-        //       formatter: '{b}',
-        //       position: 'right',
-        //       show: false
-        //       },
-        //       emphasis: {
-        //         label: {
-        //         show: true
-        //         }
-        //       }
-        //     },
+              type:'scatter',
+              name: '火车站数量',
+              mapType: 'china',
+              coordinateSystem: 'geo',
+              data: convertData(data),
+              symbolSize:function(val){
+                return val[2]
+              },
+              encode: {
+                value: 2
+              },
+              label: {
+              formatter: '{b}',
+              position: 'right',
+              show: false
+              },
+               emphasis: {
+                label: {
+                show: true
+                }
+              }
+            },
+
+            //top 5
         //     {
         //       name: 'Top 5',
         //       type: 'effectScatter',
-        //       coordinateSystem: 'bmap',
+        //       coordinateSystem: 'geo',
         //       data: convertData(
         //           data
         //             .sort(function (a, b) {
@@ -219,9 +200,9 @@ export default {
         //       emphasis: {
         //       scale: true
         //       },
-        //     zlevel: 1
-        //     }
-        // ],
+        //       zlevel:1,
+        //     },
+        ],
         title: {
           text: '各省火车站数量',
           left: 'center'
@@ -231,6 +212,7 @@ export default {
               return `${params.seriesName}<br />${params.marker} ${params.data.name}: ${params.data.value[2]}`
             }
         },
+              
       });
      
 
